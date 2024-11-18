@@ -1,0 +1,215 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PEDIDOS 100
+
+typedef struct {
+    int id;
+    char borda[30];
+    char tamanho[30];
+    char sabor1[30];
+    char sabor2[30];
+    char bebida[30];
+    float total;
+} Pedido;
+
+Pedido pedidos[MAX_PEDIDOS];
+int totalPedidos = 0;
+
+float calcularTotal(float valorBorda, float valorTamanho, float valorSabor1, float valorSabor2, float valorBebida) {
+    return valorBorda + valorTamanho + valorSabor1 + valorSabor2 + valorBebida;
+}
+
+void preencherPedido(Pedido *pedido) {
+    pedido->total = 0;
+
+    printf("Selecione a borda (1-Tradicional, 2-Alho frito, 3-Cheddar): ");
+    int escolhaBorda;
+    scanf("%d", &escolhaBorda);
+    switch (escolhaBorda) {
+        case 1:
+            strcpy(pedido->borda, "Tradicional");
+            pedido->total += 2.00;
+            break;
+        case 2:
+            strcpy(pedido->borda, "Alho frito");
+            pedido->total += 3.00;
+            break;
+        case 3:
+            strcpy(pedido->borda, "Cheddar");
+            pedido->total += 4.00;
+            break;
+        default:
+            printf("Opção inválida. Pedido cancelado.\n");
+            return;
+    }
+
+    printf("Selecione o tamanho (1-Pequena, 2-Média, 3-Grande): ");
+    int escolhaTamanho;
+    scanf("%d", &escolhaTamanho);
+    switch (escolhaTamanho) {
+        case 1:
+            strcpy(pedido->tamanho, "Pequena");
+            pedido->total += 10.00;
+            break;
+        case 2:
+            strcpy(pedido->tamanho, "Média");
+            pedido->total += 15.00;
+            break;
+        case 3:
+            strcpy(pedido->tamanho, "Grande");
+            pedido->total += 20.00;
+            break;
+        default:
+            printf("Opção inválida. Pedido cancelado.\n");
+            return;
+    }
+
+    printf("Selecione o sabor 1 (1-Calabresa, 2-Mussarela, 3-Frango, 4-Portuguesa, 5-Marguerita): ");
+    int escolhaSabor1;
+    scanf("%d", &escolhaSabor1);
+    switch (escolhaSabor1) {
+        case 1:
+            strcpy(pedido->sabor1, "Calabresa");
+            pedido->total += 5.00;
+            break;
+        case 2:
+            strcpy(pedido->sabor1, "Mussarela");
+            pedido->total += 6.00;
+            break;
+        case 3:
+            strcpy(pedido->sabor1, "Frango");
+            pedido->total += 7.00;
+            break;
+        case 4:
+            strcpy(pedido->sabor1, "Portuguesa");
+            pedido->total += 8.00;
+            break;
+        case 5:
+            strcpy(pedido->sabor1, "Marguerita");
+            pedido->total += 9.00;
+            break;
+        default:
+            printf("Opção inválida. Pedido cancelado.\n");
+            return;
+    }
+
+    printf("Selecione o sabor 2 (1-Calabresa, 2-Mussarela, 3-Frango, 4-Portuguesa, 5-Marguerita, 0-Nenhum): ");
+    int escolhaSabor2;
+    scanf("%d", &escolhaSabor2);
+    switch (escolhaSabor2) {
+        case 0:
+            strcpy(pedido->sabor2, "Nenhum");
+            break;
+        case 1:
+            strcpy(pedido->sabor2, "Calabresa");
+            pedido->total += 5.00;
+            break;
+        case 2:
+            strcpy(pedido->sabor2, "Mussarela");
+            pedido->total += 6.00;
+            break;
+        case 3:
+            strcpy(pedido->sabor2, "Frango");
+            pedido->total += 7.00;
+            break;
+        case 4:
+            strcpy(pedido->sabor2, "Portuguesa");
+            pedido->total += 8.00;
+            break;
+        case 5:
+            strcpy(pedido->sabor2, "Marguerita");
+            pedido->total += 9.00;
+            break;
+        default:
+            printf("Opção inválida. Pedido cancelado.\n");
+            return;
+    }
+
+    printf("Selecione a bebida (1-Refrigerante, 2-Suco, 0-Nenhum): ");
+    int escolhaBebida;
+    scanf("%d", &escolhaBebida);
+    switch (escolhaBebida) {
+        case 0:
+            strcpy(pedido->bebida, "Nenhum");
+            break;
+        case 1:
+            strcpy(pedido->bebida, "Refrigerante");
+            pedido->total += 5.00;
+            break;
+        case 2:
+            strcpy(pedido->bebida, "Suco");
+            pedido->total += 3.00;
+            break;
+        default:
+            printf("Opção inválida. Pedido cancelado.\n");
+            return;
+    }
+
+    printf("Pedido atualizado com sucesso!\n");
+}
+
+void adicionarPedido() {
+    if (totalPedidos >= MAX_PEDIDOS) {
+        printf("Erro: Limite máximo de pedidos atingido.\n");
+        return;
+    }
+
+    Pedido novoPedido;
+    novoPedido.id = totalPedidos + 1;
+
+    preencherPedido(&novoPedido);
+    pedidos[totalPedidos++] = novoPedido;
+}
+
+void editarPedido() {
+    int id;
+    printf("Digite o ID do pedido que deseja editar: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < totalPedidos; i++) {
+        if (pedidos[i].id == id) {
+            printf("Editando pedido ID %d:\n", id);
+            preencherPedido(&pedidos[i]);
+            return;
+        }
+    }
+
+    printf("Pedido com ID %d não encontrado.\n", id);
+}
+
+void listarPedidos() {
+    printf("\nLista de Pedidos:\n");
+    for (int i = 0; i < totalPedidos; i++) {
+        printf("ID: %d, Borda: %s, Tamanho: %s, Sabor1: %s, Sabor2: %s, Bebida: %s, Total: R$%.2f\n",
+               pedidos[i].id, pedidos[i].borda, pedidos[i].tamanho, pedidos[i].sabor1,
+               pedidos[i].sabor2, pedidos[i].bebida, pedidos[i].total);
+    }
+}
+
+int main() {
+    int opcao;
+    do {
+        printf("\n1. Adicionar Pedido\n2. Listar Pedidos\n3. Editar Pedido\n0. Sair\nEscolha uma opção: ");
+        scanf("%d", &opcao);
+        switch (opcao) {
+            case 1:
+                adicionarPedido();
+                break;
+            case 2:
+                listarPedidos();
+                break;
+            case 3:
+                editarPedido();
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida. Tente novamente.\n");
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
